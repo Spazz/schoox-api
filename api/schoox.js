@@ -10,12 +10,25 @@ var API_URL = prod_URL;
 /**
  * Schoox API Client.
  * @constructor
- * @param {string}    acadId        Your Schoox Academy ID
- * @param {string}    apiKey        Your Schoox API Key
+ * @param {string}		acadId		Your Schoox Academy ID
+ * @param {string}		apiKey		Your Schoox API Key
+ * @param {string}		env			Environment to call against (stage or prod). Default value is prod.
+ * @module schoox
  * @author Brandon Loeffler <brandon_l121@yahoo.com>
  */
 
-var Schoox = function (acad_id, api_key) {
+var Schoox = function (acad_id, api_key, env) {
+
+	switch(env) {
+		case "stage":
+			this.baseURL = "https://staging.schoox.com/api/v1";
+			break;
+		case "prod":
+			this.baseURL = "https://api.schoox.com/v1";
+			default:
+				this.baseURL = "https://api.schoox.com/v1";
+	}
+
 	this.credentials = {
 		acadId: acad_id,
 		apikey: api_key
@@ -40,7 +53,7 @@ module.exports = Schoox;
  */
 Schoox.prototype._get = function (url, parameters, callback) {
 	parameters = extend(parameters, this.credentials); // Add credentials to parameters
-	var getURL = API_URL + '/' + url + '?' + querystring.stringify(parameters); // Construct URL with parameters
+	var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(parameters); // Construct URL with parameters
 
 	console.log("Getting URL... " + getURL);
 
@@ -73,7 +86,7 @@ Schoox.prototype._get = function (url, parameters, callback) {
  * @method post
  */
 Schoox.prototype._put = function (url, requestObject, callback) {
-	var getURL = API_URL + '/' + url + '?' + querystring.stringify(this.credentials); // Construct URL with parameters
+	var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.credentials); // Construct URL with parameters
 
 	console.log("Requesting..." + getURL);
 	console.log(requestObject);
@@ -104,7 +117,7 @@ Schoox.prototype._put = function (url, requestObject, callback) {
  * @method post
  */
 Schoox.prototype._post = function (url, requestObject, callback) {
-	var getURL = API_URL + '/' + url + '?' + querystring.stringify(this.credentials); // Construct URL with parameters
+	var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.credentials); // Construct URL with parameters
 
 	console.log("Requesting..." + getURL);
 	console.log(requestObject);
