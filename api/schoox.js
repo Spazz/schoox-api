@@ -42,7 +42,7 @@ module.exports = Schoox;
 // ******************************************************************************************************
 
 /**
- * Helper to handle requests to the API with authorization.
+ * Helper to handle get requests to the API with authorization.
  *
  * @private
  * @param {string}    url             address part after API root
@@ -76,7 +76,7 @@ Schoox.prototype._get = function (url, parameters, callback) {
 
 
 /**
- * Helper to handle requests to the API with authorization.
+ * Helper to handle put requests to the API with authorization.
  *
  * @private
  * @param {string}    url             	address part after API root
@@ -107,7 +107,7 @@ Schoox.prototype._put = function (url, requestObject, callback) {
 
 
 /**
- * Helper to handle requests to the API with authorization.
+ * Helper to handle post requests to the API with authorization.
  *
  * @private
  * @param {string}    url             	address part after API root
@@ -444,8 +444,9 @@ Schoox.prototype.createUser = function(fn, ln, pw, role, email, aboveUnit, unit,
 /**
  * Changes the name and/or the above units of a Unit.
  * 
- * @param {integer}	unitId			Required, id of the user
- * @param {Object}	options			Required, {above_ids: [12345, 123456, ...]}
+ * @param {integer}	unitId				Required, id of the user
+ * @param {Object[]}	options			Required, {above_ids: [12345, 123456, ...]}
+ * @param {array} options[].above_ids	Optional, array of ID of above unit.
  * @callback		complete
  * @memberof Schoox
  * @method editUnit
