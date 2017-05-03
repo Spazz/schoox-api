@@ -511,3 +511,25 @@ Schoox.prototype.listUnits = function(options, callback) {
 		callback(error, body);
 	});
 };
+
+/**
+ * Adds Units to a given User by an array of Unit Ids.
+ * 
+ * @param {Integer} userId			ID of the user you want to add units to
+ * @param {Array} 	units			Array of IDs you want added to the User	
+ * @param {Object}	options			Optional
+ * @callback		complete
+ * @memberof Schoox
+ * @method editUnit
+ */
+
+
+Schoox.prototype.addUnitsToUser = function(userId, units, options, callback) {
+	if(!options) {
+		options = units;
+	}
+	
+	this._put('users/'+userId+"/units", options, function(error, body) {
+		callback(error, body);
+	});
+};
