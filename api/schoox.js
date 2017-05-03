@@ -455,7 +455,7 @@ Schoox.prototype.editUnit = function(unitId, options, callback) {
 	//TODO: Add checks to confirm all relevant information is provided before making call.
 	//TODO: How do I return an error if information isn't provided?
 
-	this._put('units/'+unitId, options, function (error, body) {
+	this._put('units/'+unitId, options, function (error, res, body) {
 		callback(error, res, body);
 	});
 };
@@ -529,7 +529,7 @@ Schoox.prototype.addUnitsToUser = function(userId, units, options, callback) {
 		options = units;
 	}
 	
-	this._put('users/'+userId+"/units", options, function(error, body) {
+	this._put('users/'+userId+"/units", options, function(error, res, body) {
 		callback(error, res, body);
 	});
 };
