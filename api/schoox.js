@@ -456,7 +456,7 @@ Schoox.prototype.editUnit = function(unitId, options, callback) {
 	//TODO: How do I return an error if information isn't provided?
 
 	this._put('units/'+unitId, options, function (error, body) {
-		callback(error, body);
+		callback(error, res, body);
 	});
 };
 
@@ -530,6 +530,6 @@ Schoox.prototype.addUnitsToUser = function(userId, units, options, callback) {
 	}
 	
 	this._put('users/'+userId+"/units", options, function(error, body) {
-		callback(error, body);
+		callback(error, res, body);
 	});
 };
