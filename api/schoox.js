@@ -479,3 +479,35 @@ Schoox.prototype.createBulkUnits = function(options, callback) {
 		callback(error, body);
 	});
 };
+
+/**
+ * Returns a list of Above Units (max. 100/request) of your Academy.
+ * 
+ * @param {Object}	options			Optional
+ * @callback		complete
+ * @memberof Schoox
+ * @method editUnit
+ */
+
+
+Schoox.prototype.listAboveUnits = function(options, callback) {
+	this._get('aboves', options, function(error, body) {
+		callback(error, body);
+	});
+};
+
+/**
+ * Returns a list of Units of your Academy.
+ * 
+ * @param {Object}	options			Optional
+ * @callback		complete
+ * @memberof Schoox
+ * @method editUnit
+ */
+
+
+Schoox.prototype.listUnits = function(options, callback) {
+	this._get('units', options, function(error, body) {
+		callback(error, body);
+	});
+};
