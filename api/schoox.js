@@ -401,8 +401,6 @@ Schoox.prototype.createUser = function(fn, ln, pw, role, email, aboveUnit, unit,
 		jobs: job
 	}
 
-
-
 	this._post('users', options, function (error, body) {
 		callback(error, body);
 	});
@@ -528,6 +526,50 @@ Schoox.prototype.addUnitsToUser = function(userId, units, options, callback) {
 	if(!options) {
 		options = units;
 	}
+	
+	this._put('users/'+userId+"/units", options, function(error, res, body) {
+		callback(error, res, body);
+	});
+};
+
+
+/**
+ * Adds Above Units to a given User by an array of Unit Ids.
+ * 
+ * @param {Integer} userId			ID of the user you want to add units to
+ * @param {Array} 	aboveUnits		Array of IDs you want added to the User	
+ * @param {Object}	options			Optional
+ * @callback		complete
+ * @memberof Schoox
+ * @method editUnit
+ */
+
+
+Schoox.prototype.addAboveUnitsToUser = function(userId, aboveUnits, options, callback) {
+	if(!options) {
+		options = aboveUnits;
+	}
+
+	this._put('users/'+userId+"/aboves", options, function(error, res, body) {
+		callback(error, res, body);
+	});
+};
+
+/**
+ * Edit the jobs of a given user by an array of units/above units & their job Ids.
+ * User must be previously assigned to the specified units & above units.
+ * 
+ * @param {Array} 	data			ID of the user you want to add units to	
+ * @param {Object}	options			Optional
+ * @callback		complete
+ * @memberof Schoox
+ * @method editUnit
+ */
+
+
+Schoox.prototype.updateUsersJobs = function(data, options, callback) {
+
+	
 	
 	this._put('users/'+userId+"/units", options, function(error, res, body) {
 		callback(error, res, body);
