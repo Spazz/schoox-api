@@ -39,6 +39,12 @@ class Schoox {
      * @method get
      */
     _get(url, parameters, callback) {
+
+        //Check if parameters is an object. If it is, continue on. If it isn't then return an error.
+        if (!(parameters instanceof Object)) {
+            return callback("Error: Parameter 1 was not an assocative array");
+        }
+
         parameters = extend(parameters, this.creds); // Add credentials to parameters
         var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(parameters); // Construct URL with parameters
         console.log(`GET: ${getURL}`);
@@ -110,10 +116,6 @@ class Schoox {
      */
     dashboardGetUsers(args, callback) {
         
-        if (!(args instanceof Object)) {
-            return callback("Error: Parameter 1 was not an assocative array");
-        }
-        
         this._get('dashboard/users', args, function(error, body) {
             callback(error, body);
         });
@@ -126,11 +128,13 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsers
      */
-    getUserDetails(userId, external_id, callback) {
-        var options = {
-            external_id: external_id
-        };
-        this._get(`users/${userId}`, options, function(error, body) {
+    getUserDetails(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+
+        this._get(`users/${userId}`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -143,8 +147,13 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsersCourses
      */
-    dashboardGetUsersCourses(userId, options, callback) {
-        this._get(`dashboard/users/${userId}/courses`, options, function(error, body) {
+    dashboardGetUsersCourses(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+
+        this._get(`dashboard/users/${userId}/courses`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -157,8 +166,13 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsersCurriculums
      */
-    dashboardGetUsersCurriculums(userId, options, callback) {
-        this._get(`dashboard/users/${userId}/curriculums`, options, function(error, body) {
+    dashboardGetUsersCurriculums(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+
+        this._get(`dashboard/users/${userId}/curriculums`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -171,8 +185,13 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsersExams
      */
-    dashboardGetUsersExams(userId, options, callback) {
-        this._get(`dashboard/users/${userId}/exams`, options, function(error, body) {
+    dashboardGetUsersExams(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+        
+        this._get(`dashboard/users/${userId}/exams`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -184,11 +203,8 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetCoursesList
      */
-    dashboardGetCoursesList(role, callback) {
-        var options = {
-            role: role
-        };
-        this._get('dashboard/courses', options, function(error, body) {
+    dashboardGetCoursesList(args, callback) {
+        this._get('dashboard/courses', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -202,12 +218,12 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetCoursesEnrolledUsers
      */
-    dashboardGetCoursesEnrolledUsers(courseId, role, optionals, callback) {
-        var options = {
-            role: role
-        };
-        options = extend(options, optionals);
-        this._get(`dashboard/courses/${courseId}`, options, function(error, body) {
+    dashboardGetCoursesEnrolledUsers(args, callback) {
+        if (args.courseId) {
+            let courseId = args.courseId;
+            delete args.courseId;
+        }
+        this._get(`dashboard/courses/${courseId}`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -221,8 +237,17 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsersCourseProgress
      */
-    dashboardGetUsersCourseProgress(userId, courseId, options, callback) {
-        this._get(`dashboard/courses/${courseId}/users/${userId}`, options, function(error, body) {
+    dashboardGetUsersCourseProgress(args, callback) {
+        if (args.courseId) {
+            let courseId = args.courseId;
+            delete args.courseId;
+        }
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+
+        this._get(`dashboard/courses/${courseId}/users/${userId}`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -234,11 +259,8 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetCurriculumsList
      */
-    dashboardGetCurriculumsList(role, callback) {
-        var options = {
-            role: role
-        };
-        this._get('dashboard/curriculums', options, function(error, body) {
+    dashboardGetCurriculumsList(args, callback) {
+        this._get('dashboard/curriculums', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -252,12 +274,13 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetCurriculumsEnrolledUsers
      */
-    dashboardGetCurriculumsEnrolledUsers(curriculumId, role, optionals, callback) {
-        var options = {
-            role: role
-        };
-        options = extend(options, optionals);
-        this._get(`dashboard/curriculums/${curriculumId}`, options, function(error, body) {
+    dashboardGetCurriculumsEnrolledUsers(args, callback) {
+        if (args.curriculumId) {
+            let curriculumId = args.curriculumId;
+            delete args.curriculumId;
+        }
+
+        this._get(`dashboard/curriculums/${curriculumId}`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -271,17 +294,31 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsersCurriculumProgress
      */
-    dashboardGetUsersCurriculumProgress(userId, curriculumId, options, callback) {
-        this._get(`dashboard/curriculums/${curriculumId}/users/${userId}`, options, function(error, body) {
+    dashboardGetUsersCurriculumProgress(args, callback) {
+        if (args.curriculumId) {
+            let curriculumId = args.curriculumId;
+            delete args.curriculumId;
+        }
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+
+        this._get(`dashboard/curriculums/${curriculumId}/users/${userId}`, args, function(error, body) {
             callback(error, body);
         });
     }
-    dashboardGetExamsList(role, callback) {
+    dashboardGetExamsList(args, callback) {
     }
-    dashboardGetExamsEnrolledUsers(examId, role, options, callback) {
+    dashboardGetExamsEnrolledUsers(args, callback) {
     }
-    courseEnrolledUsers(courseId, options, callback) {
-        this._get(`courses/${courseId}/students`, options, function(error, body) {
+    courseEnrolledUsers(args, callback) {
+        if (args.courseId) {
+            let courseId = args.courseId;
+            delete args.courseId;
+        }
+
+        this._get(`courses/${courseId}/students`, args, function(error, body) {
             callback(error, body);
         });
     }
@@ -298,12 +335,8 @@ class Schoox {
      * @memberof Schoox
      * @method listUsers
      */
-    listUsers(role, options, callback) {
-        var additions = {
-            role: role
-        };
-        options = extend(options, additions);
-        this._get('users', options, function(error, body) {
+    listUsers(args, callback) {
+        this._get('users', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -317,18 +350,18 @@ class Schoox {
      * @memberof Schoox
      * @method dashboardGetUsersCurriculumProgress
      */
-    createUser(fn, ln, pw, role, email, aboveUnit, unit, job) {
+    createUser(args, callback) {
         //TODO: Add checks to confirm all relevant information is provided before making call.
         //TODO: How do I return an error if information isn't provided?
-        options = {
-            firstname: fn,
-            lastname: ln,
-            password: pw,
-            roles: role,
-            unit_ids: aboveUnit,
-            jobs: job
+        required = {
+            firstname: `String`,
+            lastname: `String`,
+            password: `String`,
+            roles: `String`,
+            unit_ids: `Array`,
+            jobs: `String`
         };
-        this._post('users', options, function(error, body) {
+        this._post('users', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -341,10 +374,10 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    editUnit(unitId, options, callback) {
+    editUnit(args, callback) {
         //TODO: Add checks to confirm all relevant information is provided before making call.
         //TODO: How do I return an error if information isn't provided?
-        this._put(`units/${unitId}`, options, function(error, res, body) {
+        this._put(`units/${unitId}`, args, function(error, res, body) {
             callback(error, res, body);
         });
     }
@@ -356,10 +389,10 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    createBulkUnits(options, callback) {
+    createBulkUnits(args, callback) {
         //TODO: Add checks to confirm all relevant information is provided before making call.
         //TODO: How do I return an error if information isn't provided?
-        this._post('units/bulk', options, function(error, body) {
+        this._post('units/bulk', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -371,8 +404,8 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    listAboveUnits(options, callback) {
-        this._get('aboves', options, function(error, body) {
+    listAboveUnits(args, callback) {
+        this._get('aboves', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -384,8 +417,8 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    listUnits(options, callback) {
-        this._get('units', options, function(error, body) {
+    listUnits(args, callback) {
+        this._get('units', args, function(error, body) {
             callback(error, body);
         });
     }
@@ -399,11 +432,13 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    addUnitsToUser(userId, units, options, callback) {
-        if (!options) {
-            options = units;
+    addUnitsToUser(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
         }
-        this._put(`users/${userId}/units`, options, function(error, res, body) {
+
+        this._put(`users/${userId}/units`, args, function(error, res, body) {
             callback(error, res, body);
         });
     }
@@ -417,11 +452,12 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    addAboveUnitsToUser(userId, aboveUnits, options, callback) {
-        if (!options) {
-            options = aboveUnits;
+    addAboveUnitsToUser(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
         }
-        this._put(`users/${userId}/aboves`, options, function(error, res, body) {
+        this._put(`users/${userId}/aboves`, args, function(error, res, body) {
             callback(error, res, body);
         });
     }
@@ -435,8 +471,13 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    updateUsersJobs(data, options, callback) {
-        this._put(`users/${userId}/units`, options, function(error, res, body) {
+    updateUsersJobs(args, callback) {
+        if (args.userId) {
+            let userId = args.userId;
+            delete args.userId;
+        }
+
+        this._put(`users/${userId}/units`, args, function(error, res, body) {
             callback(error, res, body);
         });
 	}
@@ -451,24 +492,6 @@ class Schoox {
 	 * @memberof Schoox
 	 * @method dashboardGetUsersCurriculumProgress
 	 */
-
-	createUser(fn, ln, pw, role, email, aboveUnit, unit, job) {
-		//TODO: Add checks to confirm all relevant information is provided before making call.
-		//TODO: How do I return an error if information isn't provided?
-
-		options = {
-			firstname: fn,
-			lastname: ln,
-			password: pw,
-			roles: role, //Must be an array
-			unit_ids: aboveUnit, //Must be an array
-			jobs: job
-		}
-
-		this._post('users', options, function (error, body) {
-			callback(error, body);
-		});
-	};
 }
 
 module.exports = Schoox;
