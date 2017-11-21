@@ -71,8 +71,16 @@ class Schoox {
      * @memberof Schoox
      * @method post
      */
-    _put(url, requestObject, callback) {
-        var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.credentials); // Construct URL with parameters
+    _put(url, parameters, requestObject, callback) {
+
+        //Check if parameters is an object. If it is, continue on. If it isn't then return an error.
+        if (!(parameters instanceof Object)) {
+            return callback("Error: Parameter 1 was not an assocative array");
+        }
+
+        parameters = extend(parameters, this.creds); // Add credentials to parameters
+
+        var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(parameters); // Construct URL with parameters
         console.log(`PUT: ${getURL}`);
         console.log(requestObject);
         request.put({
@@ -96,7 +104,7 @@ class Schoox {
      * @method post
      */
     _post(url, requestObject, callback) {
-        var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.credentials); // Construct URL with parameters
+        var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.creds); // Construct URL with parameters
         console.log(`POST: ${getURL}`);
         console.log(requestObject);
         request.post({
@@ -129,8 +137,9 @@ class Schoox {
      * @method dashboardGetUsers
      */
     getUserDetails(args, callback) {
+        
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
 
@@ -149,7 +158,7 @@ class Schoox {
      */
     dashboardGetUsersCourses(args, callback) {
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
 
@@ -168,7 +177,7 @@ class Schoox {
      */
     dashboardGetUsersCurriculums(args, callback) {
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
 
@@ -187,7 +196,7 @@ class Schoox {
      */
     dashboardGetUsersExams(args, callback) {
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
         
@@ -220,7 +229,7 @@ class Schoox {
      */
     dashboardGetCoursesEnrolledUsers(args, callback) {
         if (args.courseId) {
-            let courseId = args.courseId;
+            var courseId = args.courseId;
             delete args.courseId;
         }
         this._get(`dashboard/courses/${courseId}`, args, function(error, body) {
@@ -239,11 +248,11 @@ class Schoox {
      */
     dashboardGetUsersCourseProgress(args, callback) {
         if (args.courseId) {
-            let courseId = args.courseId;
+            var courseId = args.courseId;
             delete args.courseId;
         }
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
 
@@ -276,8 +285,8 @@ class Schoox {
      */
     dashboardGetCurriculumsEnrolledUsers(args, callback) {
         if (args.curriculumId) {
-            let curriculumId = args.curriculumId;
-            delete args.curriculumId;
+            var curriculumId = args.curriculumId;
+            //delete args.curriculumId;
         }
 
         this._get(`dashboard/curriculums/${curriculumId}`, args, function(error, body) {
@@ -296,11 +305,11 @@ class Schoox {
      */
     dashboardGetUsersCurriculumProgress(args, callback) {
         if (args.curriculumId) {
-            let curriculumId = args.curriculumId;
+            var curriculumId = args.curriculumId;
             delete args.curriculumId;
         }
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
 
@@ -314,7 +323,7 @@ class Schoox {
     }
     courseEnrolledUsers(args, callback) {
         if (args.courseId) {
-            let courseId = args.courseId;
+            var courseId = args.courseId;
             delete args.courseId;
         }
 
@@ -422,6 +431,20 @@ class Schoox {
             callback(error, body);
         });
     }
+
+    /**
+     * Returns a list of Jobs in your Academy.
+     *
+     * @param {Object}	args			Optional
+     * @callback		complete
+     * @memberof Schoox
+     * @method editUnit
+     */
+    listJobs(args, callback) {
+        this._get('jobs', args, function(error, body) {
+            callback(error, body);
+        });
+    }
     /**
      * Adds Units to a given User by an array of Unit Ids.
      *
@@ -434,30 +457,34 @@ class Schoox {
      */
     addUnitsToUser(args, callback) {
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
+        if(args.external_id) {
+            var external_id = args.external_id;
+            delete args.external_id;
+        }
 
-        this._put(`users/${userId}/units`, args, function(error, res, body) {
+        this._put(`users/${userId}/units`, args.data, function(error, res, body) {
             callback(error, res, body);
         });
     }
     /**
      * Adds Above Units to a given User by an array of Unit Ids.
      *
-     * @param {Integer} userId			ID of the user you want to add units to
+     * @param {Object}  args			userId = User ID of the user. data = array of above units to add.
      * @param {Array} 	aboveUnits		Array of IDs you want added to the User
      * @param {Object}	options			Optional
      * @callback		complete
      * @memberof Schoox
      * @method editUnit
      */
-    addAboveUnitsToUser(args, callback) {
+    addAboveUnitsToUser(args, body, callback) {
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
-        this._put(`users/${userId}/aboves`, args, function(error, res, body) {
+        this._put(`users/${userId}/aboves`, args, body, function(error, res, body) {
             callback(error, res, body);
         });
     }
@@ -471,13 +498,13 @@ class Schoox {
      * @memberof Schoox
      * @method editUnit
      */
-    updateUsersJobs(args, callback) {
+    updateUsersJobs(args, body, callback) {
         if (args.userId) {
-            let userId = args.userId;
+            var userId = args.userId;
             delete args.userId;
         }
 
-        this._put(`users/${userId}/units`, args, function(error, res, body) {
+        this._put(`users/${userId}/jobs`, args, body, function(error, res, body) {
             callback(error, res, body);
         });
 	}

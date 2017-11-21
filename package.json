@@ -1,12 +1,11 @@
 {
-  "name": "schoox-api",
-  "version": "1.0.0",
+  "name": "schoox-api-wrapper",
+  "version": "0.1.0",
   "description": "nodejs wrapper for Schoox API",
-  "main": "api/schoox.js",
+  "main": "index.js",
   "keywords": [
     "schoox",
-    "api",
-    "wrapper"
+    "api-wrapper"
   ],
   "author": "Brandon Loeffler",
   "license": "MIT",
