@@ -106,7 +106,7 @@ class Schoox {
     _post(url, requestObject, callback) {
         var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.creds); // Construct URL with parameters
         console.log(`POST: ${getURL}`);
-        console.log(requestObject);
+
         request.post({
             url: getURL,
             json: true,
@@ -115,6 +115,33 @@ class Schoox {
             callback(error, response, body || {});
         });
     }
+
+    // ******************************************************************************************************
+    // DELETE Helper
+    // ******************************************************************************************************
+    /**
+     * Helper to handle requests to the API with authorization.
+     *
+     * @private
+     * @param {string}    url             	address part after API root
+     * @param {Object}    parameters        additional parameters
+     * @memberof Schoox
+     * @method post
+     */
+    _delete(url, parameters, callback) {
+        var getURL = this.baseURL + '/' + url + '?' + querystring.stringify(this.creds); // Construct URL with parameters
+        console.log(`DELETE: ${getURL}`);
+
+        request.delete({
+            url: getURL
+        }, function(error, response, body) {
+            callback(error, response, body || {});
+        });
+    }
+
+
+
+
     /**
      * Show All Users.
      * This method returns all users.
@@ -362,6 +389,7 @@ class Schoox {
     createUser(args, callback) {
         //TODO: Add checks to confirm all relevant information is provided before making call.
         //TODO: How do I return an error if information isn't provided?
+            // I do this by returning callback(" <field name is missing> missing");
         required = {
             firstname: `String`,
             lastname: `String`,
@@ -510,7 +538,7 @@ class Schoox {
 	}
 	
 	/**
-	 * Returns a list of enrolled users in a curriculum with a summary of information for every user
+	 * Deletes a specific Unit.
 	 * 
 	 * @param {integer}	userId			Required, id of the user
 	 * @param {integer}	curriculumId	Required, id of the curriculum
@@ -519,6 +547,18 @@ class Schoox {
 	 * @memberof Schoox
 	 * @method dashboardGetUsersCurriculumProgress
 	 */
+
+     deleteUnit(args, callback) {
+        if(args.unitId) {
+            var userId = args.userId;
+            delete args.userId;        
+        }
+
+        this._delete(`units/${userId}`, function(error, body) {
+            callback(error, body);
+        });
+     }
 }
+
 
 module.exports = Schoox;
