@@ -7,9 +7,17 @@
     "schoox",
     "api-wrapper"
   ],
-  "author": "Brandon Loeffler",
-  "url": "https://github.com/Spazz/schoox-api",
-  "email": "brandon.loeffler@brinker.com",
+  "author": "Brandon Loeffler <brandon.loeffler@brinker.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Spazz/schoox-api"
+  },
+  "bugs": {
+    "url": "https://github.com/Spazz/schoox-api/issues"
+  },
+  "engines": {
+    "node": ">= 8"
+  },
   "license": "MIT",
   "dependencies": {
     "querystring": "^0.2.0",
