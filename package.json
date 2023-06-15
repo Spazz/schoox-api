@@ -7,7 +7,7 @@
     "schoox",
     "api-wrapper"
   ],
-  "author": "Brandon Loeffler <brandon.loeffler@brinker.com>",
+  "author": "Brandon Loeffler",
   "repository": {
     "type": "git",
     "url": "https://github.com/Spazz/schoox-api"
