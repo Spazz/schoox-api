@@ -16,9 +16,9 @@ const API_URL = prod_URL;
  * @constructor
  * @param {string}		acadId		Your Schoox Academy ID
  * @param {string}		apiKey		Your Schoox API Key
- * @param {string}		env			Environment to call against (stage or prod). Default value is prod.
+ * @param {string}		env			Environment to call against ('stage' or 'prod'). Default value is prod.
  * @module Schoox
- * @author Brandon Loeffler <loeffler.1287 at gmail.com>
+ * @author Brandon Loeffler
  */
 
 const Schoox = function(acad_id, api_key, env) {
@@ -41,8 +41,8 @@ const Schoox = function(acad_id, api_key, env) {
 
 module.exports = Schoox;
 
-//endregion
-// ******************************************************************************************************
+//#endregion
+
 //#region API GET Helper
 
 /**
@@ -70,11 +70,11 @@ Schoox.prototype._get = function (url, parameters, callback) {
 		if (response.statusCode != 200) {
 			error = new Error("Status was not OK.", response.statusCode);
 		}
-		callback(error, body || {});
+		callback(error, response, body || {});
 	});
 };
-//endregion
-// ******************************************************************************************************
+//#endregion
+
 //#region API PUT Helper
 /**
  * Helper to handle requests to the API with authorization.
@@ -102,8 +102,8 @@ Schoox.prototype._put = function (url, requestObject, callback) {
 	});
 };
 
-//endregion
-// ******************************************************************************************************
+//#endregion
+
 //#region API POST Helper
 /**
  * Helper to handle requests to the API with authorization.
@@ -131,4 +131,4 @@ Schoox.prototype._post = function (url, requestObject, callback) {
 	});
 };
 
-//endregion
+//#endregion
