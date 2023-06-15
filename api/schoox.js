@@ -37,6 +37,9 @@ const Schoox = function(acad_id, api_key, env) {
 		acadId: acad_id,
 		apikey: api_key
 	};
+
+	// Nested 'usage' object
+	this.usage = require('./calls/usage')(this);
 };
 
 module.exports = Schoox;
@@ -68,9 +71,9 @@ Schoox.prototype._get = function (url, parameters, callback) {
 	}, function (error, response, body) {
 		
 		if (response.statusCode != 200) {
-			error = new Error("Status was not OK.", response.statusCode);
+			error = new Error(`Status was not OK. ${response.statusCode}`);
 		}
-		callback(error, response, body || {});
+		callback(error, body || {});
 	});
 };
 //#endregion

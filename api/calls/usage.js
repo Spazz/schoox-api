@@ -1,18 +1,17 @@
-var Schoox = require('../schoox.js');
-var extend = require('xtend');
-
-//#region GET /usage
-/**
- * Returns the remaining calls according to your plan.
- * @callback		complete
- * @memberof        Schoox
- * @method          dashboardGetUsers
- */
-
- Schoox.prototype.getUsage = function (callback) {
-
-	this._get('/usage', options, function (error, body) {
-		callback(error, body);
-	});
-};
-//#endregion
+module.exports = function(schoox){
+    return {
+        //#region GET /usage
+        /**
+         * Returns the remaining calls according to your plan.
+         * @callback        complete
+         * @memberof        Schoox
+         * @method          getUsage 
+         */
+        getUsage: function(callback) {
+            options = {};
+            schoox._get('usage', options, function(err, body) {
+                callback(err, body)
+            })
+        }
+    }
+}
