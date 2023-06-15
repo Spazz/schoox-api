@@ -38,8 +38,10 @@ const Schoox = function(acad_id, api_key, env) {
 		apikey: api_key
 	};
 
-	// Nested 'usage' object
+	// Importing each calls file
+	//TODO: Update this to loop through the files in the calls folder.
 	this.usage = require('./calls/usage')(this);
+	this.users = require('./calls/users')(this);
 };
 
 module.exports = Schoox;
