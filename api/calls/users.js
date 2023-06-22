@@ -1,203 +1,230 @@
+var extend = require('xtend');
+
 module.exports = function(schoox){
-    return;
-}
-// /**
-//  * Returns a list of academy's users. A role must be specified. Available values are: employee, customer, instructor & member.
-//  *
-//  * @param {integer}	role			Required, employee, customer, instructor & member
-//  * @param {Object}	options			Optional, {past: String, search: String, aboveId: Integer, unitId: Integer, jobId: Integer,
-//  *                                  start: Integer, limit: Integer}
-//  * @param {Function} callback
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method listUsers
-//  */
+    return {
 
-//  Schoox.prototype.listUsers = function (options, callback) {
-    
-//     this._get('users', options, function(error, body) {
-//         callback(error, body);
-//     });
-// }
-// /**
-//  * Returns a list of enrolled users in a curriculum with a summary of information for every user
-//  *
-//  * @param {integer}	userId			Required, id of the user
-//  * @param {integer}	curriculumId	Required, id of the curriculum
-//  * @param {Object}	options			Optional, {external_id: integer}
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method dashboardGetUsersCurriculumProgress
-//  */
-// Schoox.prototype.createUser = function (args, callback) {
-//     //TODO: Add checks to confirm all relevant information is provided before making call.
-//     //TODO: How do I return an error if information isn't provided?
-//         // I do this by returning callback(" <field name is missing> missing");
-//     required = {
-//         firstname: `String`,
-//         lastname: `String`,
-//         password: `String`,
-//         roles: `String`,
-//         unit_ids: `Array`,
-//         jobs: `String`
-//     };
-//     this._post('users', args, function(error, body) {
-//         callback(error, body);
-//     });
-// }
-// /**
-//  * Changes the name and/or the above units of a Unit.
-//  *
-//  * @param {integer}	unitId			Required, id of the user
-//  * @param {Object}	options			Required, {above_ids: [12345, 123456, ...]}
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.editUnit = function (args, callback) {
-//     //TODO: Add checks to confirm all relevant information is provided before making call.
-//     //TODO: How do I return an error if information isn't provided?
-//     this._put(`units/${unitId}`, args, function(error, res, body) {
-//         callback(error, res, body);
-//     });
-// }
-// /**
-//  * Creates multiple Units (maximum of 100) via a single request.
-//  *
-//  * @param {Object}	options			Required, [ {name: "Name of Unit", above_ids: [12345, 123456, ...]}, ...]
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.createBulkUnits = function (args, callback) {
-//     //TODO: Add checks to confirm all relevant information is provided before making call.
-//     //TODO: How do I return an error if information isn't provided?
-//     this._post('units/bulk', args, function(error, body) {
-//         callback(error, body);
-//     });
-// }
-// /**
-//  * Returns a list of Above Units (max. 100/request) of your Academy.
-//  *
-//  * @param {Object}	options			Optional
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.listAboveUnits = function (args, callback) {
-//     this._get('aboves', args, function(error, body) {
-//         callback(error, body);
-//     });
-// }
-// /**
-//  * Returns a list of Units of your Academy.
-//  *
-//  * @param {Object}	options			Optional
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.listUnits = function (args, callback) {
-//     this._get('units', args, function(error, body) {
-//         callback(error, body);
-//     });
-// }
+        //#region GET /users
+        /**
+         * Returns a list of academy's users. A role must be specified. Available values are: employee, customer, instructor & member.
+         *
+         * @param {String}	    role	            
+         * @param {Object}	    [options]		    
+         * @param {String}      options.past
+         * @param {String}      options.search
+         * @param {Integer}     options.aboveId
+         * @param {Integer}     options.unitId
+         * @param {Integer}     options.jobId
+         * @param {Integer}     options.start
+         * @param {Integer}     options.limit
+         * 
+         * @param {Function}    callback
+         * @param {String}      callback.error
+         * @param {Object}      callback.body
+         */
 
-// /**
-//  * Returns a list of Jobs in your Academy.
-//  *
-//  * @param {Object}	args			Optional
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.listJobs = function (args, callback) {
-//     this._get('jobs', args, function(error, body) {
-//         callback(error, body);
-//     });
-// }
-// /**
-//  * Adds Units to a given User by an array of Unit Ids.
-//  *
-//  * @param {Integer} userId			ID of the user you want to add units to
-//  * @param {Array} 	units			Array of IDs you want added to the User
-//  * @param {Object}	options			Optional
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.addUnitsToUser = function (args, callback) {
-//     if (args.userId) {
-//         var userId = args.userId;
-//         delete args.userId;
-//     }
-//     if(args.external_id) {
-//         var external_id = args.external_id;
-//         delete args.external_id;
-//     }
+        listUsers: function(role, options, callback) {
 
-//     this._put(`users/${userId}/units`, args.data, function(error, res, body) {
-//         callback(error, res, body);
-//     });
-// }
-// /**
-//  * Adds Above Units to a given User by an array of Unit Ids.
-//  *
-//  * @param {Object}  args			userId = User ID of the user. data = array of above units to add.
-//  * @param {Array} 	aboveUnits		Array of IDs you want added to the User
-//  * @param {Object}	options			Optional
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.addAboveUnitsToUser = function (args, body, callback) {
-//     if (args.userId) {
-//         var userId = args.userId;
-//         delete args.userId;
-//     }
-//     this._put(`users/${userId}/aboves`, args, body, function(error, res, body) {
-//         callback(error, res, body);
-//     });
-// }
-// /**
-//  * Edit the jobs of a given user by an array of units/above units & their job Ids.
-//  * User must be previously assigned to the specified units & above units.
-//  *
-//  * @param {Array} 	data			ID of the user you want to add units to
-//  * @param {Object}	options			Optional
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method editUnit
-//  */
-// Schoox.prototype.updateUsersJobs = function (args, body, callback) {
-//     if (args.userId) {
-//         var userId = args.userId;
-//         delete args.userId;
-//     }
+            const req = {
+                role: role
+            };
+        
+            options = extend(options, req);
 
-//     this._put(`users/${userId}/jobs`, args, body, function(error, res, body) {
-//         callback(error, res, body);
-//     });
-// }
+            schoox._get('users', options, function(error, body) {
+               callback(error, body);
+            });
+        },
+        //#endregion
 
-// /**
-//  * Deletes a specific Unit.
-//  * 
-//  * @param {integer}	userId			Required, id of the user
-//  * @param {integer}	curriculumId	Required, id of the curriculum
-//  * @param {Object}	options			Optional, {external_id: integer}
-//  * @callback		complete
-//  * @memberof Schoox
-//  * @method dashboardGetUsersCurriculumProgress
-//  */
+        //#region POST /users
+        /**
+         * Returns a list of enrolled users in a curriculum with a summary of information for every user
+         *
+         * @param {integer}	userId			Required, id of the user
+         * @param {integer}	curriculumId	Required, id of the curriculum
+         * @param {Object}	options			Optional, {external_id: integer}
+         * @callback		complete
+         */
+        createUser: function(args, callback) {
+            //TODO: Add checks to confirm all relevant information is provided before making call.
+            //TODO: How do I return an error if information isn't provided?
+                // I do this by returning callback(" <field name missing> missing");
+            required = {
+                firstname: `String`,
+                lastname: `String`,
+                password: `String`,
+                roles: `String`,
+                unit_ids: `Array`,
+                jobs: `String`
+            };
+            schoox._post('users', args, function(error, body) {
+               callback(error, body);
+            });
+        },
+        //#endregion
+        
+        //#region PUT /units/:unitid
+        /**
+         * Changes the name and/or the above units of a Unit.
+         *
+         * @param {integer}	unitId			Required, id of the user
+         * @param {Object}	options			Required, {above_ids: [12345, 123456, ...]}
+         * @callback		complete
+         */
+        editUnit: function(args, callback) {
+            //TODO: Add checks to confirm all relevant information is provided before making call.
+            //TODO: How do I return an error if information isn't provided?
+            schoox._put(`units/${unitId}`, args, function(error, res, body) {
+               callback(error, res, body);
+            });
+        },
+        //#endregion
 
-//  Schoox.prototype.deleteUnit = function (args, callback) {
-//     if(args.unitId) {
-//         var userId = args.userId;
-//         delete args.userId;        
-//     }
+        //#region POST /units/bulk
+        /**
+         * Creates multiple Units (maximum of 100) via a single request.
+         *
+         * @param {Object}	options			Required, [ {name: "Name of Unit", above_ids: [12345, 123456, ...]}, ...]
+         * @callback		complete
+         * @memberof Schoox
+         * @method editUnit
+         */
+        createBulkUnits: function(args, callback) {
+            //TODO: Add checks to confirm all relevant information is provided before making call.
+            //TODO: How do I return an error if information isn't provided?
+            schoox._post('units/bulk', args, function(error, body) {
+               callback(error, body);
+            });
+        },
+        //#endregion
 
-//     this._delete(`units/${userId}`, function(error, body) {
-//         callback(error, body);
-//     });
-//  }
+        //#region GET /aboves
+        /**
+         * Returns a list of Above Units (max. 100/request) of your Academy.
+         *
+         * @param {Object}	options			Optional
+         * @callback		complete
+         * @memberof Schoox
+         * @method editUnit
+         */
+        listAboveUnits: function(args, callback) {
+            schoox._get('aboves', args, function(error, body) {
+               callback(error, body);
+            });
+        },
+        //#endregion
+
+        //#region GET /units
+        /**
+         * Returns a list of Units of your Academy.
+         *
+         * @param {Object}	options			Optional
+         * @callback		complete
+         * @memberof Schoox
+         * @method editUnit
+         */
+        listUnits: function(args, callback) {
+            schoox._get('units', args, function(error, body) {
+               callback(error, body);
+            });
+        },
+        //#endregion
+
+        //#region GET /jobs
+        /**
+         * Returns a list of Jobs in your Academy.
+         *
+         * @param {Object}	args			Optional
+         * @callback		complete
+         * @memberof Schoox
+         * @method editUnit
+         */
+        listJobs: function(args, callback) {
+            schoox._get('jobs', args, function(error, body) {
+               callback(error, body);
+            });
+        },
+        //#endregion
+
+        //#region PUT /users/:userid/units
+        /**
+         * Adds Units to a given User by an array of Unit Ids.
+         *
+         * @param {Integer} userId			ID of the user you want to add units to
+         * @param {Array} 	units			Array of Unit IDs you want added to the User
+         * @param {Object}	options			Optional, {external_id: String, title: String}
+         * @callback		complete
+         * @memberof        Schoox
+         * @method          addUnitsToUser
+         */
+        addUnitsToUser: function(userId, units, options, body, callback) {
+
+            schoox._put(`users/${userId}/units`, options, body, function(error, res, body) {
+               callback(error, res, body);
+            });
+        },
+        //#endregion
+
+        //#region PUT /users/:userid/aboves
+        /**
+         * Adds Above Units to a given User by an array of Unit Ids.
+         *
+         * @param {String}  userId          Required, userID of the user you want to update above units on
+         * @param {Array}   aboveUnits      Required, above units you want to add to the user
+         * @param {Object}  options			Optional, {external_id: String, title: String}
+         * @callback		complete
+         * @memberof        Schoox
+         * @method          addAboveUnitstoUser
+         */
+        addAboveUnitstoUser: function(userId, aboveUnits, options, callback) {
+
+            schoox._put(`users/${userId}/aboves`, options, aboveUnits, function(error, res, body) {
+               callback(error, res, body);
+            });
+        },
+        //#endregion
+
+        //#region PUT /users/:userid/jobs
+        /**
+        * Edit the jobs of a given user by an array of units/above units & their job Ids.
+        * User must be previously assigned to the specified units & above units.
+        *
+        * @param {String}   userId          Required, ID of the user you want to 
+        * @param {Array} 	data			ID of the user you want to add units to
+        * @param {Object}	options			Optional
+        * @callback		    complete
+        * @memberof         Schoox
+        * @method           updateUsersJobs
+        */
+        updateUsersJobs: function(userId, body, callback) {
+
+            schoox._put(`users/${userId}/jobs`, args, body, function(error, res, body) {
+               callback(error, res, body);
+            });
+        },
+        //#endregion
+
+        //#region DEL /units/:userid
+        /**
+         * Deletes a specific Unit.
+         * 
+         * @param       {integer}	unitId			    Required, id of the unit
+         * @param       {Object}	_options			    Optional settings
+         * @param       {String}    options.title       Sets whether the id given is the current title of the Unit. By default, the value is "false"
+         * @param       {String}    options.external_id Sets whether the id given is the external_id of the Unit. By default, the value is "false"
+         * @callback                callback
+         * @param       {String}    error               Returns any error messages
+         * @param       {JSON}      body                Returns the call body                    
+         * @memberof Schoox
+         * @method dashboardGetUsersCurriculumProgress
+         */
+
+        deleteUnit: function(unitId, _options, callback) {
+
+            schoox._delete(`units/${unitId}`, function(error, body) {
+               callback(error, body);
+            });
+        }
+        //#endregion
+    };
+};
