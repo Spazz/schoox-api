@@ -134,7 +134,7 @@ module.exports = function(schoox){
         /**
          * Returns a list of Jobs in your Academy.
          *
-         * @param {Object}	args			Optional
+         * @param {Object}	args			
          * @callback		complete
          * @memberof Schoox
          * @method editUnit
