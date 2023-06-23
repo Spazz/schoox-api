@@ -23,7 +23,6 @@ module.exports = function(schoox){
          */
 
         listUsers: function(role, options, callback) {
-
             const req = {
                 role: role
             };
