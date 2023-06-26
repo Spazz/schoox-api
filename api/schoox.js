@@ -1,5 +1,7 @@
 const extend = require('xtend');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 class Schoox {
   #credentials;
@@ -21,8 +23,23 @@ class Schoox {
       apikey: api_key,
     };
 
-    this.usage = require('./calls/usage')(this);
-    this.users = require('./calls/users')(this);
+    this._loadCalls();
+
+    }
+
+    // this.usage = require('./calls/usage')(this);
+    // this.users = require('./calls/users')(this);
+
+  _loadCalls() {
+    const callsDirectory = path.join(__dirname, 'calls');
+    const files = fs.readdirSync(callsDirectory);
+
+    files.forEach(file => {
+      const fileName = path.parse(file).name;
+      const funcName = fileName.replace('.js', '');
+
+      this[funcName] = require(`./calls/${fileName}`)(this);
+    });
   }
 
   _get(url, parameters, callback) {

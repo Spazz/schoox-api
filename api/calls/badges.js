@@ -1,2 +1,5 @@
-var Schoox = require('../schoox.js');
-var extend = require('xtend');
+module.exports = function(schoox){
+    return {
+        //put my calls here
+    }
+}
