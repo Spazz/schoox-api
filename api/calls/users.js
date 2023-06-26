@@ -73,8 +73,8 @@ module.exports = function(schoox){
         editUnit: function(args, callback) {
             //TODO: Add checks to confirm all relevant information is provided before making call.
             //TODO: How do I return an error if information isn't provided?
-            schoox._put(`units/${unitId}`, args, function(error, res, body) {
-               callback(error, res, body);
+            schoox._put(`units/${unitId}`, args, function(error, body) {
+               callback(error, body);
             });
         },
         //#endregion

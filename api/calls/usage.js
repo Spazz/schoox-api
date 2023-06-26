@@ -10,7 +10,7 @@ module.exports = function(schoox){
         getUsage: function(callback) {
             options = {};
             schoox._get('usage', options, function(err, body) {
-                callback(err, body)
+                callback(err, body);
             })
         }
     }
