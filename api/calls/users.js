@@ -4,36 +4,66 @@ module.exports = function(schoox){
     return {
 
         //#region GET /users
+
         /**
-         * Returns a list of academy's users. A role must be specified. Available values are: employee, customer, instructor & member.
+         * Retrieves a list of academy users based on the specified role.
          *
-         * @param {String}	    role	            
-         * @param {Object}	    [options]		    
-         * @param {String}      options.past
-         * @param {String}      options.search
-         * @param {Integer}     options.aboveId
-         * @param {Integer}     options.unitId
-         * @param {Integer}     options.jobId
-         * @param {Integer}     options.start
-         * @param {Integer}     options.limit
-         * 
-         * @param {Function}    callback
-         * @param {String}      callback.error
-         * @param {Object}      callback.body
+         * @param {Object}     options                      Optional parameters.
+         * @param {string}     [options.role=employee]      Role of the users. Available values are: "employee", "customer", "instructor", and "member". Defaulted to employee
+         * @param {boolean}    [options.past]               Specify as "true" to list past employees if the given role is "employee". Default value is "false".
+         * @param {string}     [options.search]             Search by user's firstname or lastname.
+         * @param {number}     [options.aboveId]            Above Unit's ID.
+         * @param {number}     [options.unitId]             Unit's ID.
+         * @param {number}     [options.jobId]              Job's ID.
+         * @param {number}     [options.start]              Starting position.
+         * @param {number}     [options.limit]              Number of users to return per request, up to a maximum of 100. Default value is 100.
+         * @param {Function}   callback                     Callback function to handle the response.
+         * @param {string}     callback.error               Error message if any.
+         * @param {Object}     callback.body                Response body containing the list of users.
          */
 
-        listUsers: function(role, options, callback) {
+        getUsers: function (options, callback) {
             const req = {
-                role: role
+                role: options.role || 'employee',
+                past: options.past,
+                search: options.search,
+                aboveId: options.aboveId,
+                unitId: options.unitId,
+                jobId: options.jobId,
+                start: options.start,
+                limit: options.limit
             };
         
-            options = extend(options, req);
-
-            schoox._get('users', options, function(error, body) {
-               callback(error, body);
+            schoox._get('users', req, function (error, body) {
+                callback(error, body);
             });
         },
         //#endregion
+        
+        //#region GET /users/:userid
+
+        /**
+         * Retrieves details of a specific user.
+         *
+         * @param {string}     userid                       The ID of the user.
+         * @param {Object}     options                      Optional parameters.
+         * @param {string}     [options.external_id=false]  Sets whether the ID given is the external_id of the user. By default, the value is "false".
+         * @param {Function}   callback                     Callback function to handle the response.
+         * @param {string}     callback.error               Error message if any.
+         * @param {Object}     callback.body                Response body containing the details of the user.
+         */
+        getUserDetails: function (userid, options, callback) {
+            
+            const req = {
+            external_id: options.external_id || 'false'
+            };
+        
+            schoox._get(`users/${userid}`, req, function (error, body) {
+                callback(error, body);
+            });
+        },
+        //#endregion
+    
 
         //#region POST /users
         /**
@@ -62,6 +92,31 @@ module.exports = function(schoox){
         },
         //#endregion
         
+        //#region PUT /users/:userid
+        /**
+         * Edits the details of a specific user.
+         *
+         * @param {string}      userid                         The ID of the user. 
+         * @param {Object}      [options]                      Optional parameters
+         * @param {string}      [options.external_id]          Sets whether the ID given is the external_id of the user. By default, the value is "false".
+         * @param {Object}      userData                       Object of all values you want updated on the user.
+         * @param {Function}    callback                       Callback function to handle the response.
+         * @param {string}      callback.error                 Error message if any.
+         * @param {Object}      callback.body                  Response body containing the details of the updated user.
+         */
+        editUser: function (userid, options, userData, callback) {
+            const req = {
+                external_id: options.external_id,
+            };
+        
+            schoox._put(`users/${userid}`, req, userData, function (error, body) {
+            callback(error, body);
+            });
+        },
+        //#endregion
+  
+
+
         //#region PUT /units/:unitid
         /**
          * Changes the name and/or the above units of a Unit.

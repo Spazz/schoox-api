@@ -2,7 +2,7 @@
   "name": "schoox-api-wrapper",
   "version": "1.0.0",
   "description": "nodejs wrapper for Schoox API",
-  "main": "index.js",
+  "main": "api/schoox.js",
   "keywords": [
     "schoox",
     "api-wrapper"
@@ -21,7 +21,6 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.4.0",
-    "querystring": "^0.2.0",
     "xtend": "^4.0.1"
   }
 }

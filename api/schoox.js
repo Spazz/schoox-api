@@ -58,7 +58,7 @@ class Schoox {
       params: extend(parameters, this.#credentials),
     };
 
-    console.log('GET:', url, config.params);
+    console.log('GET:', url);
 
     axios
       .get(url, config)
@@ -73,10 +73,11 @@ class Schoox {
       });
   }
 
-  _put(url, requestObject, callback) {
+  _put(url, parameters, requestObject, callback) {
+    
     const config = {
       baseURL: this.baseURL,
-      params: this.#credentials,
+      params: extend(parameters, this.#credentials),
     };
 
     console.log('PUT:', url, config.params);
@@ -85,7 +86,7 @@ class Schoox {
     axios
       .put(url, requestObject, config)
       .then(function (response) {
-        callback(null, response, response.data || {});
+        callback(null, response.data || {});
       })
       .catch(function (error) {
         callback(error, {});
@@ -104,7 +105,7 @@ class Schoox {
     axios
       .post(url, requestObject, config)
       .then(function (response) {
-        callback(null, response, response.data || {});
+        callback(null, response || {});
       })
       .catch(function (error) {
         callback(error, {});
