@@ -1,4 +1,3 @@
-var Schoox = require('../schoox.js');
 var extend = require('xtend');
 
 module.exports = function(schoox){
@@ -6,18 +5,27 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users
 		/**
-		 * Returns a list of current users in your organization with a summary of their training performance 
-		 * (e.g. total training hours, courses and exams). By default only the first 100 people are returned.
-		 * The list can be filtered on letter, role, region and location and paged using the optional paging parameters.
-		 * @param {string}	role		Required, this is the role of the user making the call. Defaulted to 'employee'.
-		 * @param {Object}	options		Optional, { userId: Integer, external_id: String, aboveId: Integer, jobId: Integer, start: Integer,
-		 * 								limit: 100, sort: String }
-		 * @callback		complete
-		 * @memberof Schoox
-		 * @method dashboardGetUsers
+		 * Returns a list of current users in your organization with a summary of their training performance.
+		 *
+		 * @param {String}      [role=employee]         Users' role
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {Integer}     [options.aboveId]       Above Unit's ID
+		 * @param {Integer}     [options.unitId]        Unit's ID
+		 * @param {Integer}     [options.jobId]         Job's ID
+		 * @param {String}      [options.search]        Search text
+		 * @param {Integer}     [options.start]         List's starting position
+		 * @param {Integer}     [options.limit]         Number of users to return per request, up to a maximum of 1,000.
+		 *                                              Defaults to 100.
+		 * @param {String}      [options.sort]          Sorting criteria
+		 * @param {String}      [options.order]         Descending or ascending order
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Array}       callback.body           Response body containing the list of users with training performance summary
 		 */
 
-		listUsers: function (role = 'employee', options, callback) {
+		getUsers: function (role = 'employee', options, callback) {
 			
 			const req = {
 				role: role
@@ -25,7 +33,7 @@ module.exports = function(schoox){
 
 			options = extend(options, req);
 
-			this._get('dashboard/users', options, function (error, body) {
+			schoox._get('dashboard/users', options, function (error, body) {
 				callback(error, body);
 			});
 		},
@@ -33,18 +41,21 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users/:userid/courses
 		/**
-		 * Returns a list of all courses a user is enrolled in with a summary of his or her total training and training information by course
-		 * (e.g. enrollment/assignment date, due date, total time spent on the course and progress).
-		 * By default only the first 100 people are returned.
-		 * @param {string} userid	Required, this is the Schoox ID or external_id (if the external_id option is set to true)
-		 * @param {Object} options 	Optional, {category_id: Integer, external_id: String, dropped_out: String}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUserCourses 
+		 * Returns a list of all courses a user is enrolled in with a summary of their total training and training information by course.
+		 *
+		 * @param {String}      userid                  User ID
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {Integer}     [options.category_id]   Academy category ID
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {String}      [options.dropped_out]   Sets whether the courses are dropped out by the user
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Array}       callback.body           Response body containing the list of courses for the user
 		 */
-		listUserCourses: function (userid, options, callback) {
+		getUserCourses: function (userid, options, callback) {
 
-			this._get(`dashboard/users/${userid}/courses`, options, function(error, body) {
+			schoox._get(`dashboard/users/${userid}/courses`, options, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -52,18 +63,20 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users/:userid/curriculums
 		/**
-		 * Returns a list of all curriculums a user is enrolled in with a summary of his or her total training and training information by
-		 * curriculum (e.g. enrollment/assignment date, due date, total time spent on the curriculum and progress).
-		 * By default only the first 100 people are returned.
-		 * @param {string} userid	Required, this is the Schoox ID or external_id (if the external_id option is set to true)
-		 * @param {Object} options 	Optional, {external_id: String}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUserCurriculums 
+		 * Returns a list of all curriculums a user is enrolled in with a summary of their total training and training information by curriculum.
+		 *
+		 * @param {String}      userid                  User ID
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Array}       callback.body           Response body containing the list of curriculums for the user
 		 */
-		listUserCuriculums: function (userid, options, callback) {
 
-			this._get(`dashboard/users/${userid}/curriculums`, options, function(error, body) {
+		getUserCuriculums: function (userid, options, callback) {
+
+			schoox._get(`dashboard/users/${userid}/curriculums`, options, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -71,17 +84,20 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users/:userid/exams
 		/**
-		 * Returns a list of all exams a user has taken so far with information about his or her performance on every exam
-		 * (e.g. number of attempts, date of last attempt, score, points, passing score). By default only the first 100 people are returned.
-		 * @param {string} userid	Required, this is the Schoox ID or external_id (if the external_id option is set to true)
-		 * @param {Object} options 	Optional, {external_id: String}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUserExams 
+		 * Returns a list of all exams a user has taken with information about their performance on each exam.
+		 *
+		 * @param {String}      userid                  User ID
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Array}       callback.body           Response body containing the list of exams for the user
 		 */
-		listUserExams: function (userid, options, callback) {
 
-			this._get(`dashboard/users/${userid}/exams`, options, function(error, body) {
+		getUserExams: function (userid, options, callback) {
+
+			schoox._get(`dashboard/users/${userid}/exams`, options, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -89,19 +105,22 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users/:userid/ojts
 		/**
-		 * Returns a list of all on the job trainings of a user has taken so far with information about his or her performance on every
-		 * on the job training. Also returns a "more" flag which indicates if there are more on the job trainings to show.
-		 * By default only the first 100 on the job trainings are returned. You can optionally use the "start" parameter to set
-		 * the offset of the listing
-		 * @param {string} userid	Required, this is the Schoox ID or external_id if the external_id option is set to true
-		 * @param {Object} options 	Optional, {external_id: String, start: Integer}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUserOJTS 
+		 * Returns a list of all on the job trainings a user has taken, along with information about their performance on each training.
+		 *
+		 * @param {String}      userid                  User ID
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {Integer}     [options.start]         Defines the offset of the on the job trainings listing.
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Object}      callback.body           Response body containing the list of on the job trainings for the user
+		 * @param {Boolean}     callback.body.more      Flag indicating if there are more on the job trainings to show
 		 */
-		listUserOJTS: function (userid, options, callback) {
 
-			this._get(`dashboard/users/${userid}/ojts`, options, function(error, body) {
+		getUserOJTS: function (userid, options, callback) {
+
+			schoox._get(`dashboard/users/${userid}/ojts`, options, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -109,16 +128,20 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users/:userid/summary
 		/**
-		 * Get a User's dashboard summary information
-		 * @param {string} userid	Required, this is the Schoox ID or external_id if the external_id option is set to true
-		 * @param {Object} options 	Optional, {external_id: String}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUserSummary 
+		 * Retrieves the dashboard summary information for a specific user.
+		 *
+		 * @param {String}      userid                  User ID
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Object}      callback.body           Response body containing the dashboard summary information for the user
 		 */
-		listUserSummary: function (userid, options, callback) {
 
-			this._get(`dashboard/users/${userid}/summary`, options, function(error, body) {
+		getUserSummary: function (userid, options, callback) {
+
+			schoox._get(`dashboard/users/${userid}/summary`, options, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -126,16 +149,20 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/users/:userid/manager
 		/**
-		 * Get a User's dashboard summary information
-		 * @param {string} userid	Required, this is the Schoox ID or external_id if the external_id option is set to true
-		 * @param {Object} options 	Optional, {external_id: String}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUserManager 
+		 * Retrieves the manager dashboard information for a specific user.
+		 *
+		 * @param {String}      userid                  User ID
+		 * @param {Object}      [options]               Optional parameters
+		 * @param {String}      [options.external_id]   Sets whether the ID given is the external ID of the User.
+		 *                                              By default, the value is "false".
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Object}      callback.body           Response body containing the manager dashboard information for the user
 		 */
-		listUserManager: function (userid, options, callback) {
 
-			this._get(`dashboard/users/${userid}/manager`, options, function(error, body) {
+		getUserManagerDashboard: function (userid, options, callback) {
+
+			schoox._get(`dashboard/users/${userid}/manager`, options, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -143,19 +170,22 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/courses
 		/**
-		 * Returns a list of all courses with title, short description and image.
-		 * @param {string} role		Required, this is the role of the user making the call. Defaulted to 'employee'.
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofCourses 
+		 * Retrieves a list of all courses with their title, short description, and image.
+		 *
+		 * @param {Object}		[options]				Optional Parameters
+		 * @param {String}      [options.role=employee] Users' role. Defaulted to employee
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Object}    	callback.body           Response body containing the list of courses
 		 */
-		listCourses: function (role = 'employee', callback) {
 
-			const options = {
-				role: role
-			};
+		getCourses: function (role = 'employee', callback) {
 
-			this._get(`dashboard/courses`, options, function(error, body) {
+			const req = {
+				role: options.role || 'employee'
+			}
+
+			schoox._get(`dashboard/courses`, req, function(error, body) {
 				callback(error, body);
 			})
 		},
@@ -163,26 +193,217 @@ module.exports = function(schoox){
 
 		//#region GET /dashboard/courses/:courseid
 		/**
-		 * Returns a list of all courses with title, short description and image.
-		 * @param {string} courseid	Required, this is the course id.
-		 * @param {string} role		Required, this is the role of the user making the call. Defaulted to 'employee'.
-		 * @param {Object} options	Optional, {aboveId: Integer, unitId: Integer, jobId: Integer, search: String, start: Integer, limit: Integer,
-		 * 							sort: String, order: String}
-		 * @callback	   complete
-		 * @memberof	   Schoox
-		 * @method		   dashboardGetListofUsersinCourse
+		 * Retrieves a list of enrolled users in a course with a summary of information for every user.
+		 *
+		 * @param {Integer}     courseid                		Course ID
+		 * @param {Object}		[options]						Optional Parameters
+		 * @param {String}      [options.role=employee]         Users' role. Defaulted to employee
+		 * @param {Integer}     [options.aboveId]               Above Unit's ID
+		 * @param {Integer}     [options.unitId]                Unit's ID
+		 * @param {Integer}     [options.jobId]                 Job's ID
+		 * @param {String}      [options.search]                Search text
+		 * @param {Integer}     [options.start]                 List's starting position
+		 * @param {Integer}     [options.limit]                 Number of users to return per request, up to a maximum of 1,000. Default to 100
+		 * @param {String}      [options.sort]                  Sorting criteria
+		 * @param {String}      [options.order]                 Descending or ascending order
+		 * @param {Function}    callback                		Callback function to handle the response
+		 * @param {String}      callback.error          		Error message if any
+		 * @param {Object}    	callback.body           		Response body containing the list of enrolled users
 		 */
-		listUsersinCourse: function (courseid, role = 'employee', options, callback) {
 
-			const reqs = {
-				role: role
+		getUsersEnrolledinCourse: function (courseid, options, callback) {
+
+			const req = {
+				role: options.role || 'employee',
+				aboveId: options.aboveId,
+				unitId: options.unitId,
+				jobId: options.unitId,
+				search: options.search,
+				start: options.start,
+				limit: options.limit,
+				sort: options.sort,
+				order: options.order
 			};
 
-			options = extend(options, reqs);
-
-			this._get(`dashboard/courses/${courseid}`, options, function(error, body) {
+			schoox._get(`dashboard/courses/${courseid}`, req, function(error, body) {
 				callback(error, body);
 			})
+		},
+		//#endregion
+
+		//#region GET /dashboard/courses/:courseid/users/:userid
+		/**
+		 * Retrieves detailed information about a user's progress on a course, including progress, time spent, attempts, and exam scores for each lecture and exam.
+		 *
+		 * @param {Integer}     courseid                Course ID
+		 * @param {Integer}     userid                  User ID	
+		 * @param {Object}		[options]				Optional Parameters
+		 * @param {String}      [options.external_id=false]   Sets whether the ID given is the external ID of the User. By default, the value is "false"
+		 * @param {Function}    callback                Callback function to handle the response
+		 * @param {String}      callback.error          Error message if any
+		 * @param {Object}   	callback.body           Response body containing the detailed course progress information
+		 */
+
+		getUsersDetailedCourseProgress: function (courseid, userid, options, callback) {
+
+			const req = {
+				external_id: options.external_id || 'false'
+			}
+
+			schoox._get(`dashboard/courses/${courseid}/users/${userid}`, req, function(error, body) {
+				callback(error, body);
+			})
+		},
+		//#endregion
+
+		//#region GET /dashboard/curriculums
+		/**
+		 * Get a list of curriculums.
+		 *
+		 * @param {Object}		options						Optional paramters	
+		 * @param {string}		[options.role=employee]		User's role. Defaulted to employee
+		 * @param {function}	callback					The callback function.
+		 * @param {String} 		callback.error				The error object if an error occurred, null otherwise.
+		 * @param {Object} 		callback.body				Response body containing the detailed course progress information
+		 */
+
+		getListofCurriculums: function (options, callback) {
+
+			const req = {
+				role: options.role || 'employee',
+			};
+
+			schoox._get(`curriculums`, req, function(error, body) {
+				callback(error,body);
+			})
+		},
+		//#endregion
+
+		//#region GET dashboard/curriculums/:curriculumid
+		/**
+		 * Returns a list of enrolled users in a curriculum with a summary of information for every user.
+		 *
+		 * @param {string}     curriculumId        			The ID of the curriculum.
+		 * @param {Object}     options             			Optional parameters.
+		 * @param {string}     [options.role='employee']    Users' role.
+		 * @param {number}     [options.aboveId]   			Above Unit's ID.
+		 * @param {number}     [options.unitId]    			Unit's ID.
+		 * @param {number}     [options.jobId]     			Job's ID.
+		 * @param {string}     [options.search]    			Search text.
+		 * @param {number}     [options.start]     			List's starting position.
+		 * @param {number}     [options.limit]     			Number of users to return per request, up to a maximum of 1,000. Defaults to 100.
+		 * @param {string}     [options.sort]      			Sorting criteria.
+		 * @param {string}     [options.order]     			Descending or ascending order.
+		 * @param {Function}   callback            			Callback function to handle the response.
+		 * @param {string}     callback.error      			Error message if any.
+		 * @param {Array}      callback.body       			Response body containing the list of enrolled users with summary information.
+		 */
+		getEnrolledUsersInCurriculum: function (curriculumId, options, callback) {
+			
+			const req = {
+				role: options.role || 'employee',
+				aboveId: options.aboveId,
+				unitId: options.unitId,
+				jobId: options.jobId,
+				search: options.search,
+				start: options.start,
+				limit: options.limit,
+				sort: options.sort,
+				order: options.order
+			};
+		
+			schoox._get(`dashboard/curriculums/${curriculumId}`, req, function (error, body) {
+				callback(error, body);
+			});
+		},
+
+		//#region GET dashboard/curriculums/:curriculumid/users/:userid
+		/**
+		 * Returns detailed information about a user's progress on a curriculum for every single course of it.
+		 *
+		 * @param {string}     curriculumId          		The ID of the curriculum.
+		 * @param {string}     userId                		The ID of the user.
+		 * @param {Object}     options               		Optional parameters.
+		 * @param {number}     options.acadId        		Your academy ID.
+		 * @param {string}     options.apikey        		Your academy's API key.
+		 * @param {string}     [options.external_id=false]  Sets whether the ID given is the external ID of the User. Defaults to "false".
+		 * @param {string}     [options.dropped_out] 		Sets whether the curricula are dropped out by the user.
+		 * @param {Function}   callback              		Callback function to handle the response.
+		 * @param {string}     callback.error        		Error message if any.
+		 * @param {Array}      callback.body         		Response body containing detailed information about the user's progress on the curriculum.
+		 */
+		getUsersCurriculumProgress: function (curriculumId, userId, options, callback) {
+			
+			const req = {
+				external_id: options.external_id || false,
+				dropped_out: options.dropped_out
+			};
+		
+			schoox._get(`dashboard/curriculums/${curriculumId}/users/${userId}`, req, function (error, body) {
+			callback(error, body);
+			});
+		},
+
+		//#region GET /dashboard/exams
+		/**
+		 * Returns a list of all exams with title, image, and publishing date.
+		 *
+		 * @param {Object}     options               	Optional parameters.
+		 * @param {string}     [options.role=employee]  Users' role. Defaulted to employee
+		 * @param {Function}   callback              	Callback function to handle the response.
+		 * @param {string}     callback.error        	Error message if any.
+		 * @param {Array}      callback.body         	Response body containing the list of exams.
+		 */
+		getListofExams: function (options, callback) {
+			
+			const req = {
+				role: options.role || 'employee'
+			};
+		
+			schoox._get('dashboard/exams', req, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
+		//#region GET /dashboard/exams/:examid
+
+		/**
+		 * Returns a list of all users for an exam with detailed information about every user's performance.
+		 *
+		 * @param {string}     examId                	The ID of the exam.
+		 * @param {Object}     options               	Optional parameters.
+		 * @param {string}     [options.role=employee]  Users' role.
+		 * @param {number}     [options.aboveId]     	Above Unit's ID.
+		 * @param {number}     [options.unitId]      	Unit's ID.
+		 * @param {number}     [options.jobId]       	Job's ID.
+		 * @param {string}     [options.search]      	Search text.
+		 * @param {number}     [options.start]       	List's starting position.
+		 * @param {number}     [options.limit]       	Number of users to return per request, up to a maximum of 1,000. Defaults to 100.
+		 * @param {string}     [options.sort]        	Sorting criteria.
+		 * @param {string}     [options.order]       	Descending or ascending order.
+		 * @param {Function}   callback              	Callback function to handle the response.
+		 * @param {string}     callback.error        	Error message if any.
+		 * @param {Array}      callback.body         	Response body containing the list of enrolled users with detailed information.
+		 */
+
+		getEnrolledUsersInExam: function (examId, options, callback) {
+			
+			const req = {
+			role: options.role || 'employee',
+			aboveId: options.aboveId,
+			unitId: options.unitId,
+			jobId: options.jobId,
+			search: options.search,
+			start: options.start,
+			limit: options.limit,
+			sort: options.sort,
+			order: options.order
+			};
+		
+			schoox._get(`dashboard/exams/${examId}`, req, function (error, body) {
+				callback(error, body);
+			});
 		}
 		//#endregion
 	}
