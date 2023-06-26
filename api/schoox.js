@@ -23,24 +23,34 @@ class Schoox {
       apikey: api_key,
     };
 
-    this._loadCalls();
+    // Would like to use this but intellisense can't pick it up.
+    //this._loadCalls();
+
+    this.usage = require('./calls/usage')(this);
+    this.users = require('./calls/users')(this);
+    this.groups = require('./calls/groups')(this);
+    this.exams = require('./calls/exams')(this);
+    this.events = require('./calls/events')(this);
+    this.dashboard = require('./calls/dashboard')(this);
+    this.curriculums = require('./calls/curriculums')(this);
+    this.courses = require('./calls/courses')(this);
+    this.content = require('./calls/content')(this);
+    this.badges = require('./calls/badges')(this);
 
     }
 
-    // this.usage = require('./calls/usage')(this);
-    // this.users = require('./calls/users')(this);
+    // See comment on line #26
+  // _loadCalls() {
+  //   const callsDirectory = path.join(__dirname, 'calls');
+  //   const files = fs.readdirSync(callsDirectory);
 
-  _loadCalls() {
-    const callsDirectory = path.join(__dirname, 'calls');
-    const files = fs.readdirSync(callsDirectory);
+  //   files.forEach(file => {
+  //     const fileName = path.parse(file).name;
+  //     const funcName = fileName.replace('.js', '');
 
-    files.forEach(file => {
-      const fileName = path.parse(file).name;
-      const funcName = fileName.replace('.js', '');
-
-      this[funcName] = require(`./calls/${fileName}`)(this);
-    });
-  }
+  //     this[funcName] = require(`./calls/${fileName}`)(this);
+  //   });
+  // }
 
   _get(url, parameters, callback) {
     const config = {
