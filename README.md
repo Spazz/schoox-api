@@ -4,7 +4,7 @@
 Incomplete (missing calls and inconsistant features) working draft node.js wrapper for the Schoox API. The majority of the get calls are loaded in. See a status of each call cateogry below.
 >- [Badges - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/badges.js)
 >- [Content - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/content.js)
->- [Courses](https://github.com/Spazz/schoox-api/blob/master/api/calls/courses.js)
+>- [Courses - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/courses.js)
 >- [Curriculums - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/curriculums.js)
 >- [Dashboard - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/dashboard.js)
 >- [Events](https://github.com/Spazz/schoox-api/blob/master/api/calls/events.js)
