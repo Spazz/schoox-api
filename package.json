@@ -1,6 +1,6 @@
 {
   "name": "schoox-api-wrapper",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "nodejs wrapper for Schoox API",
   "main": "api/schoox.js",
   "keywords": [
