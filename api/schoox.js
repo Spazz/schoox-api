@@ -80,8 +80,7 @@ class Schoox {
       params: extend(parameters, this.#credentials),
     };
 
-    console.log('PUT:', url, config.params);
-    console.log(requestObject);
+    console.log('PUT:', url);
 
     axios
       .put(url, requestObject, config)
@@ -99,8 +98,7 @@ class Schoox {
       params: this.#credentials,
     };
 
-    console.log('POST:', url, config.params);
-    console.log(requestObject);
+    console.log('POST:', url);
 
     axios
       .post(url, requestObject, config)
