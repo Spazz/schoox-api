@@ -16,6 +16,7 @@
 </p>
 
 > Node.JS wrapper for the Schoox API
+> This is 80 % complete. There are just a handful of calls that are missing that I plan on adding in as soon as I can. If you would like to contribute don't hesitate to make a pull request or send me a message on [Twitter](https://twitter.com/flufymewmew).
 
 ## Prerequisites
 
