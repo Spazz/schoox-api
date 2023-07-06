@@ -18,6 +18,7 @@
 > Node.JS wrapper for the Schoox API
 
 ## Notes
+
 This is 80 % complete. There are just a handful of calls that are missing that I plan on adding in as soon as I can. If you would like to contribute don't hesitate to make a pull request or send me a message on [Twitter](https://twitter.com/flufymewmew).
 
 ## Prerequisites
@@ -33,11 +34,13 @@ npm install schoox-api-wrapper
 ## Usage
 
 Include the package
+
 ```sh
  const schooxAPI = require('schoox-api-wrapper')
 ```
 
 Then intiate the module using your academy ID and API key
+
 ```sh
 const api = schooxAPI('226581108', '9d3419535b0c8d76f7f6f72800f62f92')
 ```
@@ -64,7 +67,7 @@ This would give you the response
 
 👤 **Brandon L**
 
-* Github: [@Spazz](https://github.com/Spazz)
+- Github: [@Spazz](https://github.com/Spazz)
 
 ## 🤝 Contributing
 
@@ -79,4 +82,4 @@ Give a ⭐️ if this project helped you!
 Copyright © 2023 [Brandon L](https://github.com/Spazz).<br />
 This project is [MIT](https://github.com/Spazz/schoox-api/blob/master/LICENSE) licensed.
 
-***
+---

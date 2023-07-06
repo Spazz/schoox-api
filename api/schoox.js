@@ -36,10 +36,9 @@ class Schoox {
     this.courses = require('./calls/courses')(this);
     this.content = require('./calls/content')(this);
     this.badges = require('./calls/badges')(this);
+  }
 
-    }
-
-    // See comment on line #26
+  // See comment on line #26
   // _loadCalls() {
   //   const callsDirectory = path.join(__dirname, 'calls');
   //   const files = fs.readdirSync(callsDirectory);
@@ -74,7 +73,6 @@ class Schoox {
   }
 
   _put(url, parameters, requestObject, callback) {
-    
     const config = {
       baseURL: this.baseURL,
       params: extend(parameters, this.#credentials),
