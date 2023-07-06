@@ -199,6 +199,41 @@ module.exports = function(schoox){
             });
         },
         //#endregion
+        
+        //#region PUT /jobs/:jobid
+
+        /**
+         * Edits a job by changing its name and/or report ID.
+         *
+         * @param {string}     jobId                    The ID of the job.
+         * @param {Object}     requestObj               Request object schema.
+         * @param {Object}     options                  Optional Parameters.  
+         * @param {string}     options.external_id      Sets whether the ID given is the external ID of the Job.
+         *                                              By default, the value is "false".
+         * @param {string}     options.title            Sets whether the ID given is the current title of the Job.
+         *                                              By default, the value is "false".
+         * @param {Object}     requestObj
+         * @param {string}     requestObj.name          New name for the job.
+         * @param {Function}   callback                 Callback function to handle the response.
+         * @param {string}     callback.error           Error message if any.
+         * @param {Object}     callback.body            Response body containing the result of the operation.
+         */
+        
+        editJob: function (jobId, options, requestObj, callback) {
+            
+            const req = {
+            external_id: options.external_id,
+            title: options.title
+            };
+        
+            schoox._put(`jobs/${jobId}`, req, requestObj, function (error, body) {
+                callback(error, body);
+            });
+        },
+        
+        //#endregion
+  
+
 
         //#region PUT /users/:userid/units
         /**
