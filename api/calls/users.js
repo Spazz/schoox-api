@@ -346,8 +346,6 @@ module.exports = function (schoox) {
 		 *
 		 * @param {Object}	options			Required, [ {name: "Name of Unit", above_ids: [12345, 123456, ...]}, ...]
 		 * @callback		complete
-		 * @memberof Schoox
-		 * @method editUnit
 		 */
 		createBulkUnits: function (args, callback) {
 			//TODO: Add checks to confirm all relevant information is provided before making call.
@@ -364,8 +362,6 @@ module.exports = function (schoox) {
 		 *
 		 * @param {Object}	options			Optional
 		 * @callback		complete
-		 * @memberof Schoox
-		 * @method editUnit
 		 */
 		listAboveUnits: function (args, callback) {
 			schoox._get('aboves', args, function (error, body) {
@@ -380,8 +376,6 @@ module.exports = function (schoox) {
 		 *
 		 * @param {Object}	options			Optional
 		 * @callback		complete
-		 * @memberof Schoox
-		 * @method editUnit
 		 */
 		listUnits: function (args, callback) {
 			schoox._get('units', args, function (error, body) {
@@ -396,8 +390,6 @@ module.exports = function (schoox) {
 		 *
 		 * @param {Object}	args
 		 * @callback		complete
-		 * @memberof Schoox
-		 * @method editUnit
 		 */
 		listJobs: function (args, callback) {
 			schoox._get('jobs', args, function (error, body) {
