@@ -21,6 +21,17 @@
 
 This is 80 % complete. There are just a handful of calls that are missing that I plan on adding in as soon as I can. If you would like to contribute don't hesitate to make a pull request or send me a message on [Twitter](https://twitter.com/flufymewmew).
 
+[Badges - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/badges.js)
+[Content - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/content.js)
+[Courses - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/courses.js)
+[Curriculums - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/curriculums.js)
+[Dashboard - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/dashboard.js)
+[Events](https://github.com/Spazz/schoox-api/blob/master/api/calls/events.js)
+[Exams - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/exams.js)
+[Groups - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/groups.js)
+[Usage - Completed](https://github.com/Spazz/schoox-api/blob/master/api/calls/usage.js)
+[Users](https://github.com/Spazz/schoox-api/blob/master/api/calls/users.js)
+
 ## Prerequisites
 
 - node >= 8
