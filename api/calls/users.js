@@ -19,6 +19,7 @@ module.exports = function (schoox) {
 		 * @param {Function}   callback                     Callback function to handle the response.
 		 * @param {string}     callback.error               Error message if any.
 		 * @param {Object}     callback.body                Response body containing the list of users.
+		 *
 		 */
 
 		getUsers: function (options, callback) {
@@ -50,6 +51,7 @@ module.exports = function (schoox) {
 		 * @param {Function}   callback                     Callback function to handle the response.
 		 * @param {string}     callback.error               Error message if any.
 		 * @param {Object}     callback.body                Response body containing the details of the user.
+		 *
 		 */
 		getUserDetails: function (userid, options, callback) {
 			const req = {
@@ -68,15 +70,16 @@ module.exports = function (schoox) {
 		 *
 		 * @param {string}     userid                       The ID of the user.
 		 * @param {Object}     options                      Optional parameters.
-		 * @param {string}     [options.external_id=false]  Sets whether the ID given is the external_id of the user. By default, the value is "false".
+		 * @param {string}     [options.external_id]  		Sets whether the ID given is the external_id of the user. By default, the value is "false".
 		 * @param {Function}   callback                     Callback function to handle the response.
 		 * @param {string}     callback.error               Error message if any.
 		 * @param {Object}     callback.body                Response body containing the list of badges.
+		 *
 		 */
 
 		getuserBadges: function (userid, options, callback) {
 			const req = {
-				external_id: options.external_id || 'false',
+				external_id: options.external_id,
 			};
 			schoox._get(`users/${userid}/badges`, req, function (error, body) {
 				callback(error, body);
@@ -89,7 +92,7 @@ module.exports = function (schoox) {
 		 * Creates and adds a user to the academy. Password is a mandatory field in order to create a user. If it is omitted, the user will be added through an academy invitation. Email, username or an external id are mandatory fields.
 		 * Review the API documentation for more information regarding the details of this method.
 		 *
-		 * @param {Object}	userDetails			              Details of the user to be created.
+		 * @param {Object}	userDetails			          Details of the user to be created.
 		 * @param {string}	[userDetails.username]        Username of the user.
 		 * @param {string}	[userDetails.firstname]       First name of the user.
 		 * @param {string}	[userDetails.middlename]      Middle name of the user.
@@ -104,17 +107,18 @@ module.exports = function (schoox) {
 		 * @param {array}   [userDetails.unit_ids]        Unit IDs.
 		 * @param {array}   [userDetails.jobs]            Arrays of jobs.
 		 * @param {number}	[userDetails.jobs.unit_id]    Unit ID the job is assigned to.
-		 * @param {array}	  [userDetails.jobs.jobs]       Job IDs
+		 * @param {array}	[userDetails.jobs.jobs]       Job IDs
 		 * @param {string}	[userDetails.language]        Language of the user. See the official API documentation for available languages.
 		 * @param {string}  [userDetails.hired_date]      Format: YYYY-MM-DD.
 		 * @param {string}  [userDetails.employee_type]   Employee type of the user.
 		 * @param {string}  [userDetails.employee_number] Employee number of the user.
 		 * @param {Array}   [userDetails.custom_fields]   Array of custom fields.
-		 * @param {Object}	callback					            Callback function to handle the response.
-		 * @param {string}	callback.error				        Error message if any.
-		 * @param {Object}	callback.body				          Response body containing the details of the created user
+		 * @param {Object}	callback					  Callback function to handle the response.
+		 * @param {string}	callback.error				  Error message if any.
+		 * @param {Object}	callback.body				  Response body containing the details of the created user
+		 *
 		 */
-		createUser: function (userDetails, callback) {
+		createandAddUser: function (userDetails, callback) {
 			//TODO: Add checks to confirm all relevant information is provided before making call.
 			//TODO: How do I return an error if information isn't provided?
 			// I do this by returning callback(" <field name missing> missing");
@@ -153,6 +157,7 @@ module.exports = function (schoox) {
 		 * @param {Function}    callback                       Callback function to handle the response.
 		 * @param {string}      callback.error                 Error message if any.
 		 * @param {Object}      callback.body                  Response body containing the details of the updated user.
+		 *
 		 */
 		editUser: function (userid, options, userData, callback) {
 			const req = {
@@ -175,8 +180,9 @@ module.exports = function (schoox) {
 		 * @param {Function}    callback                       Callback function to handle the response.
 		 * @param {string}      callback.error                 Error message if any.
 		 * @param {Object}      callback.body                  Response body containing the details of the deleted user.
+		 *
 		 */
-		deleteUser: function (userid, options, callback) {
+		removeUser: function (userid, options, callback) {
 			const req = {
 				external_id: options.external_id,
 			};
@@ -197,6 +203,7 @@ module.exports = function (schoox) {
 		 * @param {Function}  callback                 Callback function to handle the response.
 		 * @param {string}    callback.error           Error message if any.
 		 * @param {Object}    callback.body            Response body containing the details of the deleted user.
+		 *
 		 */
 
 		reactivateUser: function (userid, options, callback) {
@@ -224,6 +231,7 @@ module.exports = function (schoox) {
 		 * @param {Function}  callback        Callback function to handle the response.
 		 * @param {string}    callback.error  Error message if any.
 		 * @param {Object}    callback.body   Response body containing the details of the created job.
+		 *
 		 */
 
 		addJob: function (jobDetails, callback) {
@@ -240,163 +248,6 @@ module.exports = function (schoox) {
 			});
 		},
 		//#region
-
-		//#region DELETE /jobs/:jobid
-		/**
-		 * Deletes a specified job. It also removes the job from all assigned users.
-		 *
-		 * @param {string}      jobid                 The ID of the job to be deleted.
-		 * @param {Object}      [options]             Optional parameters.
-		 * @param {string}      [options.external_id] Sets whether the ID given is the external.
-		 * @param {string}      [options.title]       Sets the title of the job.
-		 * @param {Function}    callback              Callback function to handle the response.
-		 * @param {string}      callback.error        Error message if any.
-		 * @param {Object}      callback.body         Response body containing the details of the deleted job.
-		 */
-		deleteJob: function (jobid, options, callback) {
-			const req = {
-				external_id: options.external_id,
-				title: options.title,
-			};
-
-			schoox._delete(`jobs/${jobid}`, req, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
-
-		//#region PUT /users/:userid/roles
-
-		/**
-		 * Edit the roles of a given user. Available roles are: admin, training_manager, content_manager, professional_instructor, hourly_worker.
-		 *
-		 * @param {string}    userid                     Users ID.
-		 * @param {Object}    options                    Additional parameters.
-		 * @param {string}    [options.external_id]      Sets whether the ID given is the external.
-		 * @param {array}     options.roles              Array of roles.
-		 * @param {Function}  callback                   Callback function to handle the response.
-		 * @param {string}    callback.error             Error message if any.
-		 * @param {Object}    callback.body              Response body containing the details of the updated user.
-		 */
-
-		updateUsersRoles: function (userid, options, callback) {
-			const options = {
-				external_id: options.external_id,
-			};
-
-			const req = options.roles;
-
-			schoox._put(
-				`users/${userid}/roles`,
-				req,
-				requestObject,
-				function (error, body) {
-					callback(error, body);
-				}
-			);
-		},
-		//#endregion
-
-		//#region PUT /units/:unitid
-		/**
-		 * Changes the name and/or the above units of a Unit.
-		 *
-		 * @param {integer}	unitId			Required, id of the user
-		 * @param {Object}	options			Required, {above_ids: [12345, 123456, ...]}
-		 * @callback		complete
-		 */
-		editUnit: function (args, callback) {
-			//TODO: Add checks to confirm all relevant information is provided before making call.
-			//TODO: How do I return an error if information isn't provided?
-			schoox._put(`units/${unitId}`, args, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
-
-		//#region PUT /users/:userid/jobs
-
-		/**
-		 *
-		 * @param {string} userid                   Users id.
-		 * @param {object} options                  Additional parameters.
-		 * @param {string} options.external_id      Sets whether the ID given is the external.
-		 * @param {array} options.jobs              Array of jobs and which unit/above unit to attach the job to [{unit: 2002, jobs: 7160}, ...].
-		 * @param {Function} callback               Callback function to handle the response.
-		 * @param {string} callback.error           Error message if any.
-		 * @param {Object} callback.body            Response body containing the details of the updated user.
-		 */
-
-		updateUsersJobs: function (userid, options, callback) {
-			const options = {
-				external_id: options.external_id,
-			};
-
-			req = options.jobs;
-
-			schoox._put(`users/${userid}/jobs`, options, req, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
-
-		//#region POST /units/bulk
-		/**
-		 * Creates multiple Units (maximum of 100) via a single request.
-		 *
-		 * @param {Object}	options			Required, [ {name: "Name of Unit", above_ids: [12345, 123456, ...]}, ...]
-		 * @callback		complete
-		 */
-		createBulkUnits: function (args, callback) {
-			//TODO: Add checks to confirm all relevant information is provided before making call.
-			//TODO: How do I return an error if information isn't provided?
-			schoox._post('units/bulk', args, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
-
-		//#region GET /aboves
-		/**
-		 * Returns a list of Above Units (max. 100/request) of your Academy.
-		 *
-		 * @param {Object}	options			Optional
-		 * @callback		complete
-		 */
-		listAboveUnits: function (args, callback) {
-			schoox._get('aboves', args, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
-
-		//#region GET /units
-		/**
-		 * Returns a list of Units of your Academy.
-		 *
-		 * @param {Object}	options			Optional
-		 * @callback		complete
-		 */
-		listUnits: function (args, callback) {
-			schoox._get('units', args, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
-
-		//#region GET /jobs
-		/**
-		 * Returns a list of Jobs in your Academy.
-		 *
-		 * @param {Object}	args
-		 * @callback		complete
-		 */
-		listJobs: function (args, callback) {
-			schoox._get('jobs', args, function (error, body) {
-				callback(error, body);
-			});
-		},
-		//#endregion
 
 		//#region PUT /jobs/:jobid
 
@@ -430,26 +281,223 @@ module.exports = function (schoox) {
 
 		//#endregion
 
+		//#region DELETE /jobs/:jobid
+		/**
+		 * Deletes a specified job. It also removes the job from all assigned users.
+		 *
+		 * @param {string}      jobid                 The ID of the job to be deleted.
+		 * @param {Object}      [options]             Optional parameters.
+		 * @param {string}      [options.external_id] Sets whether the ID given is the external.
+		 * @param {string}      [options.title]       Sets the title of the job.
+		 * @param {Function}    callback              Callback function to handle the response.
+		 * @param {string}      callback.error        Error message if any.
+		 * @param {Object}      callback.body         Response body containing the details of the deleted job.
+		 *
+		 */
+		deleteJob: function (jobid, options, callback) {
+			const req = {
+				external_id: options.external_id,
+				title: options.title,
+			};
+
+			schoox._delete(`jobs/${jobid}`, req, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
+		//#region GET /jobs
+		/**
+		 * Returns a list of Jobs in your Academy.
+		 *
+		 * @param {Object}		options 				Optional parameters.
+		 * @param {string}		options.search			Search by Job title
+		 * @param {number}		options.start			Starting position.
+		 * @param {number}		options.limit			Maximum number of jobs to return per request. Default is 100.
+		 * @param {Function}	callback				Callback function to handle the response.
+		 * @param {string}		callback.error			Error message if any.
+		 * @param {Object}		callback.body			Response body containing the list of jobs.
+		 *
+		 */
+		listJobs: function (options, callback) {
+			const reqs = {
+				search: options.search,
+				start: options.start,
+				limit: options.limit,
+			};
+
+			schoox._get('jobs', reqs, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
+		//#region PUT /users/:userid/roles
+
+		/**
+		 * Edit the roles of a given user. Available roles are: admin, training_manager, content_manager, professional_instructor, hourly_worker.
+		 *
+		 * @param {string}    userid                     Users ID.
+		 * @param {Object}    options                    Additional parameters.
+		 * @param {string}    [options.external_id]      Sets whether the ID given is the external.
+		 * @param {array}     options.roles              Array of roles.
+		 * @param {Function}  callback                   Callback function to handle the response.
+		 * @param {string}    callback.error             Error message if any.
+		 * @param {Object}    callback.body              Response body containing the details of the updated user.
+		 *
+		 */
+
+		updateUsersRoles: function (userid, options, callback) {
+			const options1 = {
+				external_id: options.external_id,
+			};
+
+			const req = options.roles;
+
+			schoox._put(
+				`users/${userid}/roles`,
+				options1,
+				req,
+				function (error, body) {
+					callback(error, body);
+				}
+			);
+		},
+		//#endregion
+
+		//#region PUT /users/:userid/jobs
+
+		/**
+		 * Edit the jobs of a given user by an array of units/above units & their job Ids. User must be previously assigned to the specified units & above units.
+		 *
+		 * @param {string} 		userid                   	Users id.
+		 * @param {object} 		options                  	Additional parameters.
+		 * @param {string} 		options.external_id      	Sets whether the ID given is the external.
+		 * @param {array}		options.jobs              	Array of jobs and which unit/above unit to attach the job to [{unit: 2002, jobs: 7160}, ...].
+		 * @param {Function} 	callback               		Callback function to handle the response.
+		 * @param {string} 		callback.error           	Error message if any.
+		 * @param {Object} 		callback.body            	Response body containing the details of the updated user.
+		 *
+		 */
+
+		updateUsersJobs: function (userid, options, callback) {
+			const req = {
+				external_id: options.external_id,
+			};
+
+			const reqObj = options.jobs;
+
+			schoox._put(`users/${userid}/jobs`, req, reqObj, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
 		//#region PUT /users/:userid/units
 		/**
 		 * Adds Units to a given User by an array of Unit Ids.
 		 *
-		 * @param {Integer} userId			ID of the user you want to add units to
-		 * @param {Array} 	units			Array of Unit IDs you want added to the User
-		 * @param {Object}	options			Optional, {external_id: String, title: String}
-		 * @callback		complete
-		 * @memberof        Schoox
-		 * @method          addUnitsToUser
+		 * @param {Integer}		userId					ID of the user you want to add units to.
+		 * @param {Object} 		options					Optional parameters.
+		 * @param {boolean} 	options.external_id		Sets whether the id given is the extenral_id of the User. By default, the value is "false".
+		 * @param {boolean} 	options.title			Sets whether the id given are the titles of the Units. By default, the value is "false".
+		 * @param {Array} 		options.units			Array of Unit IDs you want added to the User
+		 *
 		 */
-		addUnitsToUser: function (userId, units, options, body, callback) {
+		addUnitsToUser: function (userId, options, callback) {
+			const params = {
+				external_id: options.external_id,
+				title: options.title,
+			};
+
+			const reqObj = options.units;
+
 			schoox._put(
 				`users/${userId}/units`,
-				options,
-				body,
-				function (error, res, body) {
-					callback(error, res, body);
+				params,
+				reqObj,
+				function (error, body) {
+					callback(error, body);
 				}
 			);
+		},
+		//#endregion
+
+		//#region PUT /units/:unitid
+		/**
+		 * Changes the name and/or the above units of a Unit.
+		 *
+		 * @param {integer}		unitId					 	Required, id of the user
+		 * @param {Object}		options					 	Required, {above_ids: [12345, 123456, ...]}
+		 * @param {boolean}		options.external_id      	Sets whether the Unit ID given is the external ID.
+		 * @param {boolean}		options.title             	Sets whether the id given is the current ittle of the Unit.
+		 * @param {Object}		options.request           	Request Object. {name: "Austin", above_ids: [12345, 123456,...], external_id: "Austin.TX"}
+		 * @param {Function}  	callback                   	Callback function to handle the response.
+		 * @param {string}    	callback.error             	Error message if any.
+		 * @param {Object}    	callback.body              	Response body containing the details of the updated user.
+		 *
+		 */
+		editUnit: function (unitId, options, callback) {
+			const req = {
+				external_id: options.external_id,
+				title: options.title,
+			};
+
+			const reqObj = options.request;
+
+			schoox._put(`units/${unitId}`, req, reqObj, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
+		//#region POST /units/bulk
+		/**
+		 * Creates multiple Units (maximum of 100) via a single request.
+		 *
+		 * @param {Object}		options
+		 * @param {Object}		options.units			Required, [ {name: "Austin", above_ids: [12345, 123456, ...]}, external_id: "Austin.TX"}, ...]
+		 * @param {Function} 	callback				Callback function to handle the response.
+		 * @param {string}		callback.error			Error message if any.
+		 * @param {Object}		callback.body			Response body containing the details of the created.
+		 *
+		 */
+		createBulkUnits: function (options, callback) {
+			//TODO: Delete this once you have rolled it into the original create method.
+
+			const reqObj = options.units;
+
+			schoox._post('units/bulk', {}, reqObj, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
+		//#region GET /aboves
+		/**
+		 * Returns a list of Above Units (max. 100/request) of your Academy.
+		 *
+		 * @param {Object}	options			Optional
+		 * @callback		complete
+		 */
+		listAboveUnits: function (args, callback) {
+			schoox._get('aboves', args, function (error, body) {
+				callback(error, body);
+			});
+		},
+		//#endregion
+
+		//#region GET /units
+		/**
+		 * Returns a list of Units of your Academy.
+		 *
+		 * @param {Object}	options			Optional
+		 * @callback		complete
+		 */
+		listUnits: function (args, callback) {
+			schoox._get('units', args, function (error, body) {
+				callback(error, body);
+			});
 		},
 		//#endregion
 
