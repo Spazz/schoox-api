@@ -188,7 +188,7 @@ module.exports = function (schoox) {
 		/**
 		 * Retrieves a list of all courses with their title, short description, and image.
 		 *
-		 * @param {String}		  role				            Users' role
+		 * @param {String}		role				    Users' role
 		 * @param {Function}    callback                Callback function to handle the response
 		 * @param {String}      callback.error          Error message if any
 		 * @param {Object}    	callback.body           Response body containing the list of courses
