@@ -305,7 +305,7 @@ module.exports = function (schoox) {
 		 *
 		 * @param {string}     curriculumId        			The ID of the curriculum.
 		 * @param {Object}     options             			Optional parameters.
-		 * @param {string}     [options.role='employee']    Users' role.
+		 * @param {string}     [options.role]    			Users' role.
 		 * @param {number}     [options.aboveId]   			Above Unit's ID.
 		 * @param {number}     [options.unitId]    			Unit's ID.
 		 * @param {number}     [options.jobId]     			Job's ID.
@@ -320,7 +320,7 @@ module.exports = function (schoox) {
 		 */
 		getEnrolledUsersInCurriculum: function (curriculumId, options, callback) {
 			const req = {
-				role: options.role || 'employee',
+				role: options.role,
 				aboveId: options.aboveId,
 				unitId: options.unitId,
 				jobId: options.jobId,
